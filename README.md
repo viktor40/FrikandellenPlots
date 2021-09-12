@@ -1,0 +1,1 @@
+A simple python script for stats during an eating competition
