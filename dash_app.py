@@ -86,11 +86,12 @@ def update_graph(n):
         cols=2,
         specs=[[{'type': 'table'}, {}], [{"colspan": 2}, None]],
         subplot_titles=(
-            f"Totaal: <b>{global_df['totaal_frikandellen'].sum()}</b><br>" +
+            f"Totaal aantal frikandellen: <b>{global_df['totaal_frikandellen'].sum()}</b><br>" +
             '<span style="font-size: 120%; color: red;">{:02}:{:02}</span>'.format(
                 int(minutes), int(seconds)), "", "Stand"
         ),
-        vertical_spacing=0.1
+        vertical_spacing=0.1,
+        row_heights=[0.35, 0.65]
     )
 
     # The ranking bar chart
@@ -116,7 +117,7 @@ def update_graph(n):
         xref="x domain",
         yref="y domain",
         x=0.6,
-        y=1.05,
+        y=1.15,
         xanchor="left",
         yanchor="top",
         sizex=1,
@@ -162,7 +163,7 @@ def update_graph(n):
             orientation="h",
             yanchor="bottom",
             xanchor="left",
-            y=-.4,
+            y=-0.2,
             x=0,
         ),
     )
