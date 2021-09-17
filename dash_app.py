@@ -19,7 +19,7 @@ import plotly.graph_objs as go
 from PIL import Image
 from dash.dependencies import Input, Output
 from plotly.subplots import make_subplots
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # -------  globals
 global_df = None
@@ -27,7 +27,8 @@ global_fig = None
 app = dash.Dash()
 
 # set here the end time of the competition
-end_time = datetime.today().replace(hour=23, minute=0)
+# end_time = datetime.today().replace(hour=12, minute=30)
+end_time = datetime.now() + timedelta(minutes=30)
 
 
 # ---------------- helper methods ----------------
@@ -123,18 +124,26 @@ def update_graph(n):
     )
 
     # The standing table
-    table_size = 5
+    table_size = 3
+    last_segment = 'min 0-6'
+    for i in ["min 6-12", "min 12-18", "min 18-24", "min 24-30"][::-1]:
+        is_zero = all(global_df[i] == 0)
+        if not is_zero:
+            last_segment = i
+            break
+
+    last_segment_df = global_df.sort_values(by=last_segment, ascending=False)
     fig.add_trace(
         go.Table(
-            columnwidth=[300, 100],
+            columnwidth=[200, 200],
             header=dict(
-                values=['<b>Teamnaam</b>', '<b># frikandellen</b>'],
+                values=['<b>Teamnaam</b>', '<b># frikandellen in laatste segment</b>'],
                 fill_color=colors[2]
             ),
             cells=dict(
-                values=[[idx[:25] for idx in global_df.index[:table_size]],
+                values=[[idx[:25] for idx in last_segment_df.index[:table_size]],
                         [v for v in
-                         global_df['totaal_frikandellen'][:table_size]]],
+                         last_segment_df[last_segment][:table_size]]],
                 align=['left', 'center'],
             )
         ),
